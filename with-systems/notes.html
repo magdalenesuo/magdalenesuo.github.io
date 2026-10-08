@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Behind the Numbers · Medozonuo Suohu</title>
+<meta name="description" content="Short engineering stories from Stripe Data Pipeline: a scheduler thundering herd and merchant-level SLA monitoring.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column, like an engineering blog post, with the metric as each story's headline. */
+:root {
+  --bg: #F3F4F7;
+  --panel: #FFFFFF;
+  --ink: #141822;
+  --ink-2: #485062;
+  --ink-3: #6F788A;
+  --line: #DADEE6;
+  --cobalt: #2B45C6;
+  --cobalt-soft: #E2E7FA;
+  --saffron: #A86C08;
+  --display: "Geist", "Helvetica Neue", Arial, sans-serif;
+  --body: "Geist", "Helvetica Neue", Arial, sans-serif;
+  --mono: "Geist Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1117; --panel: #151922; --ink: #E5E8EF; --ink-2: #A7AFBF; --ink-3: #7C8597; --line: #262C39;
+    --cobalt: #8297FF; --cobalt-soft: #1B2344; --saffron: #E9AE44; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1117; --panel: #151922; --ink: #E5E8EF; --ink-2: #A7AFBF; --ink-3: #7C8597; --line: #262C39;
+  --cobalt: #8297FF; --cobalt-soft: #1B2344; --saffron: #E9AE44; color-scheme: dark;
+}
+:root {
+  --bs-body-bg: var(--bg); --bs-body-color: var(--ink); --bs-border-color: var(--line);
+  --bs-body-font-family: var(--body); --bs-body-font-size: 1rem; --bs-body-line-height: 1.6;
+  --bs-emphasis-color: var(--ink); --bs-heading-color: var(--ink); --bs-secondary-color: var(--ink-2);
+  --bs-link-color: var(--cobalt); --bs-link-hover-color: var(--ink);
+}
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 1.04rem; line-height: 1.7; }
+a { color: var(--cobalt); text-underline-offset: 3px; }
+a:hover { color: var(--ink); }
+:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: 760px; margin: 0 auto; padding-inline: 16px; padding-block: clamp(1.5rem, 5vw, 3rem) 3rem; }
+.back { font: 500 .8rem var(--mono); text-decoration: none; }
+.label { font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(1.9rem, 5vw, 2.8rem); line-height: 1.08; letter-spacing: -.02em; margin: .4rem 0 .8rem; text-wrap: balance; }
+.lede { color: var(--ink-2); font-size: 1.1rem; margin: 0 0 1.5rem; max-width: 60ch; }
+.toc { list-style: none; padding: 0; margin: 0 0 1rem; display: grid; gap: .5rem; }
+.toc a { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding: .7rem .9rem; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); text-decoration: none; color: var(--ink); font-weight: 500; }
+.toc a:hover { border-color: var(--cobalt); }
+.toc small { font: 500 .74rem var(--mono); color: var(--cobalt); }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; }
+article.story { padding-top: clamp(2.5rem, 7vw, 4rem); scroll-margin-top: 1rem; }
+.story .chip { display: inline-block; font: 500 .76rem var(--mono); color: var(--cobalt); background: var(--cobalt-soft); border-radius: 999px; padding: .2rem .65rem; }
+.story h2 { font-family: var(--display); font-weight: 500; font-size: clamp(1.4rem, 3.6vw, 1.85rem); line-height: 1.2; letter-spacing: -.01em; margin: .6rem 0 1rem; text-wrap: balance; }
+.story h3 { font-family: var(--mono); font-weight: 500; font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin: 1.6rem 0 .3rem; }
+.story p, .story li { max-width: 68ch; }
+.story p { margin: 0 0 .8rem; }
+.story ul { padding-left: 1.2rem; margin: 0 0 .8rem; }
+.story li { margin-bottom: .35rem; }
+.story li::marker { color: var(--ink-3); }
+.takeaway { border-left: 3px solid var(--saffron); padding: .2rem 0 .2rem 1rem; margin: 1.4rem 0 0; color: var(--ink); font-weight: 500; }
+.herd { position: relative; height: 340px; overflow: hidden; margin-bottom: 1.1rem; background: var(--bg); }
+.herd canvas { display: block; width: 100%; height: 100%; }
+.herd .cap { position: absolute; left: 1rem; top: .75rem; right: .75rem; display: flex; justify-content: space-between; align-items: center; gap: .75rem; flex-wrap: wrap; pointer-events: none; }
+.herd .ttl { font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; color: var(--ink-3); }
+.herd .modes { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; pointer-events: auto; background: var(--panel); }
+.herd .modes button { border: 0; background: transparent; color: var(--ink-2); font: 500 .74rem var(--mono); padding: .3rem .7rem; cursor: pointer; }
+.herd .modes button[aria-pressed="true"] { background: var(--cobalt); color: var(--panel); }
+.herd .foot { position: absolute; left: 1rem; right: 1rem; bottom: .7rem; pointer-events: none; }
+.herd .note { margin: 0 0 .35rem; font-size: .84rem; color: var(--ink); max-width: 60ch; }
+.herd .row2 { display: flex; justify-content: space-between; gap: .5rem 1rem; flex-wrap: wrap; }
+.herd .stats { font-family: var(--mono); font-size: .7rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.herd .key { display: flex; gap: .9rem; flex-wrap: wrap; font-family: var(--mono); font-size: .68rem; color: var(--ink-3); }
+.herd .key i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: .35rem; }
+.herd { margin: 1.2rem 0 .4rem; }
+@media (max-width: 575.98px) { .herd { height: 340px; } }
+.end { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; font: .82rem var(--mono); color: var(--ink-3); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">← With systems</a>
+  <header>
+    <div class="label" style="margin-top:1.5rem">Behind the numbers</div>
+    <h1>How the numbers happened</h1>
+    <p class="lede">Two problems from Stripe Data Pipeline, the platform that delivers Stripe data to thousands of merchants: what broke, what I found, and what I changed. Written without internal names or customer details.</p>
+  </header>
+  <ol class="toc">
+    <li><a href="#herd-story">Taming a scheduler thundering herd <small>p99: 9+ h → under 5 h</small></a></li>
+    <li><a href="#sla-story">Did the merchant get their data? <small>SLA misses: −78%</small></a></li>
+  </ol>
+
+  <article class="story" id="herd-story">
+    <span class="chip">p99 landing time: 9+ h → under 5 h</span>
+    <h2>Taming a scheduler thundering herd</h2>
+    <h3>The problem</h3>
+    <p>Spark workloads processing about 350 TB a day were landing late. The p99 landing time was over 9 hours, and runs launched at peak hours were far slower than the same runs launched off-peak.</p>
+    <h3>What I found</h3>
+    <p>I lined up Spark and YARN metrics, queue dashboards and application logs by launch hour. The jobs weren't simply short on compute. They were flooding the scheduler with bursts of executor requests at nearly 4x the queue's capacity. At peak, executor allocation went from minutes to over an hour, and preemptions forced repeated retries, which made the bursts worse.</p>
+    <div class="panel herd" id="herd" role="img" aria-label="Illustration of a YARN thundering herd. Before the fix, bursts of Spark executor requests pile up waiting and running executors get preempted. After throttling the thread pools, requests flow steadily and the queue stays full.">
+        <div class="cap">
+          <span class="ttl">YARN queue under Spark executor requests · illustration</span>
+          <div class="modes" role="group" aria-label="Scheduler behavior">
+            <button type="button" id="mode-before" aria-pressed="true">Before</button><button type="button" id="mode-after" aria-pressed="false">After fix</button>
+          </div>
+        </div>
+        <div class="foot">
+          <p class="note" id="herd-note">Before: bursts of executor requests at ~4x queue capacity. Allocation stalls and preemptions churn executors.</p>
+          <div class="row2"><span class="stats" id="herd-stats">waiting 0 · running 0/24 · preempted 0</span>
+          <span class="key"><span><i style="background: var(--saffron)"></i>waiting</span><span><i style="background: var(--cobalt)"></i>running</span><span><i style="background: var(--ink-3)"></i>preempted</span></span></div>
+        </div>
+      </div>
+    <h3>What I changed</h3>
+    <ul>
+      <li>Halved the Spark thread pools that produced the bursts, so requests arrived at a pace the scheduler could serve.</li>
+      <li>Added vCore headroom for the workload.</li>
+      <li>Retuned queue priority and preemption so running executors stopped getting evicted.</li>
+    </ul>
+    <h3>The tradeoff</h3>
+    <p>A small, deliberate increase in compute cost in exchange for predictable landing times.</p>
+    <h3>The result</h3>
+    <p>p99 landing time dropped from 9+ hours to under 5.</p>
+    <p class="takeaway">The fix was the shape of the requests, not just the amount of capacity.</p>
+  </article>
+
+  <article class="story" id="sla-story">
+    <span class="chip">SDP-driven SLA misses: −78%</span>
+    <h2>From "did the job run?" to "did the merchant get their data?"</h2>
+    <h3>The problem</h3>
+    <p>Monitoring was run-level and dataset-wide. It could tell us a job had run, but not whether a specific merchant's data had landed within their SLA. Some issues were first noticed by customers or account teams rather than by us.</p>
+    <h3>Phase 1: respond faster</h3>
+    <p>As lead DRI for SDP's reliability lockdown, I started with response: SLA-attribution dashboards and tighter on-call and acknowledgment workflows. SDP-driven SLA misses fell 78%.</p>
+    <h3>Phase 2: measure what the merchant sees</h3>
+    <p>Next, monitoring moved from infrastructure to merchant-level outcomes:</p>
+    <ul>
+      <li>Freshness checked against each merchant's SLA, not just whether a run happened.</li>
+      <li>Per-merchant staleness, so one stale merchant can't hide inside a healthy dataset.</li>
+      <li>Detection of silently retrying workflow steps, instead of waiting for long timeouts.</li>
+      <li>Entitlement and billing reconciliation, to catch paying merchants without access.</li>
+      <li>Health checks on external warehouses and upstream dependencies.</li>
+    </ul>
+    <h3>Paging without the noise</h3>
+    <p>More signals shouldn't mean more pages. Alerts are deduplicated and carry blast-radius context, so one upstream outage produces one actionable page instead of one per affected dataset.</p>
+    <p class="takeaway">Knowing a pipeline ran isn't enough. The question is whether the merchant got their data on time.</p>
+  </article>
+
+  <footer class="end">
+    <a class="back" href="index.html">← Back to With systems</a>
+    <span>medomag20@gmail.com · <a href="https://linkedin.com/in/magdalenesuo" target="_blank" rel="noopener">linkedin.com/in/magdalenesuo</a></span>
+  </footer>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const tok = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const themeFns = [];
+  const onTheme = fn => themeFns.push(fn);
+  const fireTheme = () => themeFns.forEach(fn => { try { fn(); } catch (e) { console.error(e); } });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fireTheme);
+  new MutationObserver(fireTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  /* ---------- Three.js: YARN thundering herd (illustration) ---------- */
+  (function herd() {
+    const host = document.getElementById('herd');
+    if (!window.THREE) return;
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+    host.prepend(renderer.domElement);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+    const world = new THREE.Group(); scene.add(world);
+    world.rotation.set(0.28, -0.32, 0);
+
+    const COLS = 6, ROWS = 4, CAP = COLS * ROWS, GAP = 0.62;
+    const slotX = c => 2.5 + c * GAP, slotY = r => (r - (ROWS - 1) / 2) * GAP;
+    const lineMat = new THREE.LineBasicMaterial({ transparent: true, opacity: 0.8 });
+    const faintMat = new THREE.LineBasicMaterial({ transparent: true, opacity: 0.45 });
+    const slotEdge = new THREE.EdgesGeometry(new THREE.BoxGeometry(0.46, 0.46, 0.46));
+    for (let i = 0; i < CAP; i++) {
+      const l = new THREE.LineSegments(slotEdge, faintMat);
+      l.position.set(slotX(i % COLS), slotY(Math.floor(i / COLS)), 0); world.add(l);
+    }
+    const qw = COLS * GAP + 0.3, qh = ROWS * GAP + 0.3;
+    const frame = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(qw, qh, 0.9)), lineMat);
+    frame.position.set(slotX(0) + (COLS - 1) * GAP / 2, 0, 0); world.add(frame);
+    const gate = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(1.85, -1.9, 0), new THREE.Vector3(1.85, 1.9, 0)]), lineMat);
+    world.add(gate);
+    const DRIVER = new THREE.Vector3(-6.3, 0, 0);
+    const driverMat = new THREE.MeshBasicMaterial({ wireframe: true });
+    const driver = new THREE.Mesh(new THREE.IcosahedronGeometry(0.6, 1), driverMat);
+    driver.position.copy(DRIVER); world.add(driver);
+
+    const mats = { wait: new THREE.MeshBasicMaterial(), run: new THREE.MeshBasicMaterial(), pre: new THREE.MeshBasicMaterial() };
+    const geo = new THREE.BoxGeometry(0.32, 0.32, 0.32);
+    const ex = Array.from({ length: 110 }, () => { const m = new THREE.Mesh(geo, mats.wait); m.visible = false; world.add(m); return { m, s: 'idle', t: 0, slot: -1, life: 0 }; });
+    const slots = new Array(CAP).fill(null);
+    let waiting = [], mode = 'before', spawnClock = 0, admitClock = 0, preempted = 0;
+    const CFG = { before: { burst: 44, every: 3.2, admit: 3.5, preempt: 0.8 }, after: { rate: 5.6, admit: 14, preempt: 0 } };
+    const tmp = new THREE.Vector3();
+    const waitSpot = (i, out) => out.set(1.3 - (i % 8) * 0.42, ((Math.floor(i / 8) % 7) - 3) * 0.42, 0);
+
+    function spawn(n) {
+      for (const e of ex) {
+        if (n <= 0) break;
+        if (e.s !== 'idle') continue;
+        e.s = 'wait'; e.m.visible = true; e.m.material = mats.wait; e.m.scale.setScalar(1); e.m.rotation.set(0, 0, 0);
+        e.m.position.set(DRIVER.x + 0.4, DRIVER.y + (Math.random() - 0.5) * 0.9, (Math.random() - 0.5) * 0.9);
+        waiting.push(e); n--;
+      }
+    }
+    function step(dt) {
+      const c = CFG[mode];
+      if (mode === 'before') { spawnClock += dt; if (spawnClock >= c.every) { spawnClock = 0; spawn(c.burst); } }
+      else { spawnClock += dt * c.rate; while (spawnClock >= 1) { spawnClock -= 1; spawn(1); } }
+      admitClock = Math.min(admitClock + dt * c.admit, 3);
+      while (admitClock >= 1 && waiting.length) {
+        const free = slots.indexOf(null); if (free < 0) break;
+        const e = waiting.shift(); slots[free] = e; e.s = 'run'; e.slot = free; e.life = 3.4 + Math.random(); e.m.material = mats.run; admitClock -= 1;
+      }
+      if (c.preempt && Math.random() < c.preempt * dt) {
+        const busy = []; slots.forEach((e, i) => { if (e) busy.push(i); });
+        if (busy.length) { const i = busy[Math.floor(Math.random() * busy.length)], e = slots[i]; slots[i] = null; e.s = 'pre'; e.t = 0.8; e.slot = -1; e.m.material = mats.pre; preempted++; }
+      }
+      const k = Math.min(1, dt * 5);
+      waiting.forEach((e, i) => { waitSpot(i, tmp); e.m.position.lerp(tmp, k); });
+      for (const e of ex) {
+        if (e.s === 'run') {
+          tmp.set(slotX(e.slot % COLS), slotY(Math.floor(e.slot / COLS)), 0); e.m.position.lerp(tmp, Math.min(1, dt * 6));
+          e.m.rotation.y += dt * 1.2; e.life -= dt;
+          if (e.life <= 0) { slots[e.slot] = null; e.slot = -1; e.s = 'done'; e.t = 0.35; }
+        } else if (e.s === 'done') {
+          e.t -= dt; e.m.scale.setScalar(Math.max(0.01, e.t / 0.35)); if (e.t <= 0) { e.s = 'idle'; e.m.visible = false; }
+        } else if (e.s === 'pre') {
+          e.t -= dt; e.m.position.y += dt * 2.6; e.m.position.x -= dt * 2.2;
+          if (e.t <= 0) { e.s = 'wait'; e.m.material = mats.wait; waiting.push(e); }
+        }
+      }
+    }
+
+    const stats = document.getElementById('herd-stats'), note = document.getElementById('herd-note');
+    const btnB = document.getElementById('mode-before'), btnA = document.getElementById('mode-after');
+    const NOTES = {
+      before: 'Before: bursts of executor requests at ~4x queue capacity. Allocation stalls and preemptions churn executors.',
+      after: 'After: thread pools halved and queue preemption retuned. Requests arrive at a pace the scheduler can serve, so the queue stays full.'
+    };
+    function showStats() {
+      stats.textContent = `waiting ${waiting.length} · running ${slots.filter(Boolean).length}/${CAP} · preempted ${preempted}`;
+    }
+    function reset() {
+      ex.forEach(e => { e.s = 'idle'; e.m.visible = false; e.slot = -1; });
+      slots.fill(null); waiting = []; spawnClock = 0; admitClock = 0; preempted = 0;
+    }
+    function setMode(m, user) {
+      mode = m; preempted = 0;
+      if (user) userChose = true;
+      btnB.setAttribute('aria-pressed', String(m === 'before')); btnA.setAttribute('aria-pressed', String(m === 'after'));
+      note.textContent = NOTES[m];
+      if (reduceMotion) staticFrame();
+    }
+    let userChose = false;
+    btnB.addEventListener('click', () => setMode('before', true));
+    btnA.addEventListener('click', () => setMode('after', true));
+
+    function paint() {
+      mats.wait.color.set(tok('--saffron')); mats.run.color.set(tok('--cobalt')); mats.pre.color.set(tok('--ink-3'));
+      lineMat.color.set(tok('--ink-3')); faintMat.color.set(tok('--line')); driverMat.color.set(tok('--cobalt'));
+      renderer.render(scene, camera);
+    }
+    function resize() {
+      const w = host.clientWidth, h = host.clientHeight;
+      if (!w || !h) return;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      const need = 15.5 / camera.aspect / (2 * Math.tan(16 * Math.PI / 180));
+      camera.position.set(-0.2, 0.2, Math.max(15, need)); camera.lookAt(-0.2, -0.15, 0);
+      camera.updateProjectionMatrix();
+      renderer.render(scene, camera);
+    }
+    function staticFrame() {
+      reset();
+      for (let i = 0; i < 360; i++) step(1 / 30);
+      showStats(); renderer.render(scene, camera);
+    }
+    onTheme(paint);
+    new ResizeObserver(resize).observe(host);
+    resize(); paint();
+    if (reduceMotion) { staticFrame(); return; }
+
+    // warm up so the first frame already shows the problem
+    for (let i = 0; i < 240; i++) step(1 / 30);
+    showStats(); renderer.render(scene, camera);
+
+    let visible = true, last = performance.now(), sinceSwitch = 0, statClock = 0, time = 0;
+    new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(host);
+    (function loop(now) {
+      requestAnimationFrame(loop);
+      const dt = Math.min(0.05, (now - last) / 1000); last = now;
+      if (!visible) return;
+      time += dt; sinceSwitch += dt; statClock += dt;
+      if (!userChose && sinceSwitch > 11) { sinceSwitch = 0; setMode(mode === 'before' ? 'after' : 'before', false); }
+      step(dt);
+      driver.rotation.y += dt * 0.6;
+      world.rotation.y = -0.32 + Math.sin(time * 0.25) * 0.05;
+      if (statClock > 0.25) { statClock = 0; showStats(); }
+      renderer.render(scene, camera);
+    })(last);
+  })();
+
+})();
+</script>
+</body>
+</html>
