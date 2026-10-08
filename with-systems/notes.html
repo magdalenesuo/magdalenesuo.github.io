@@ -47,6 +47,15 @@ a:hover { color: var(--ink); }
 :focus-visible { outline: 2px solid var(--cobalt); outline-offset: 3px; border-radius: 4px; }
 .wrap { max-width: 760px; margin: 0 auto; padding-inline: 16px; padding-block: clamp(1.5rem, 5vw, 3rem) 3rem; }
 .back { font: 500 .8rem var(--mono); text-decoration: none; }
+.topnav { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; font-size: .9rem; margin-bottom: clamp(1.25rem, 3vw, 2rem); }
+.topnav .me { font-weight: 600; color: var(--ink); text-decoration: none; }
+.topnav .me small { font-weight: 400; color: var(--ink-3); margin-left: .35rem; }
+.topnav .switch { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--panel); }
+.topnav .switch a, .topnav .switch span { padding: .3rem .85rem; font-size: .82rem; font-weight: 500; text-decoration: none; }
+.topnav .switch a { color: var(--ink-2); }
+.topnav .switch a:hover { color: var(--cobalt); }
+.topnav .switch span, .topnav .switch a.here { background: var(--cobalt); color: var(--panel); }
+
 .label { font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
 h1 { font-family: var(--display); font-weight: 700; font-size: clamp(1.9rem, 5vw, 2.8rem); line-height: 1.08; letter-spacing: -.02em; margin: .4rem 0 .8rem; text-wrap: balance; }
 .lede { color: var(--ink-2); font-size: 1.1rem; margin: 0 0 1.5rem; max-width: 60ch; }
@@ -86,7 +95,11 @@ article.story { padding-top: clamp(2.5rem, 7vw, 4rem); scroll-margin-top: 1rem; 
 </head>
 <body>
 <div class="wrap">
-  <a class="back" href="index.html">← With systems</a>
+  <nav class="topnav" aria-label="Site">
+    <a class="me" href="../index.html">Medozonuo Suohu<small>Bangalore</small></a>
+    <span class="switch"><a href="index.html" class="here">With systems</a><a href="../with-team/index.html">With team</a></span>
+  </nav>
+  <a class="back" href="index.html">← Back to With systems</a>
   <header>
     <div class="label" style="margin-top:1.5rem">Behind the numbers</div>
     <h1>How the numbers happened</h1>
@@ -153,7 +166,7 @@ article.story { padding-top: clamp(2.5rem, 7vw, 4rem); scroll-margin-top: 1rem; 
 
   <footer class="end">
     <a class="back" href="index.html">← Back to With systems</a>
-    <span>medomag20@gmail.com · <a href="https://linkedin.com/in/magdalenesuo" target="_blank" rel="noopener">linkedin.com/in/magdalenesuo</a></span>
+    <span>medomag20@gmail.com · <a href="https://linkedin.com/in/magdalenesuo" target="_blank" rel="noopener">LinkedIn</a> · <a href="../with-team/index.html">With team</a> · <a href="../index.html">Home</a></span>
   </footer>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>

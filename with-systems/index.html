@@ -88,8 +88,14 @@ a:hover { color: var(--ink); }
 #side-nav .nav-link:hover { color: var(--ink); }
 #side-nav .nav-link.active { color: var(--cobalt); border-left-color: var(--cobalt); font-weight: 500; }
 
-.elsewhere { margin-top: 1.25rem; font-size: .85rem; display: flex; gap: 1rem; flex-wrap: wrap; }
-.elsewhere a { text-decoration: none; font-weight: 500; }
+.topnav { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; font-size: .9rem; margin-bottom: clamp(1.25rem, 3vw, 2rem); }
+.topnav .me { font-weight: 600; color: var(--ink); text-decoration: none; }
+.topnav .me small { font-weight: 400; color: var(--ink-3); margin-left: .35rem; }
+.topnav .switch { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--panel); }
+.topnav .switch a, .topnav .switch span { padding: .3rem .85rem; font-size: .82rem; font-weight: 500; text-decoration: none; }
+.topnav .switch a { color: var(--ink-2); }
+.topnav .switch a:hover { color: var(--cobalt); }
+.topnav .switch span { background: var(--cobalt); color: var(--panel); }
 
 /* Record column */
 .record { min-width: 0; }
@@ -161,6 +167,8 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
 .closing { padding-block: clamp(3rem, 7vw, 4.5rem) 1rem; }
 .closing p { font-family: var(--display); font-weight: 500; font-size: clamp(1.2rem, 3vw, 1.6rem); letter-spacing: -.01em; max-width: 28ch; margin: .4rem 0 1rem; text-wrap: balance; }
 .colophon { font-family: var(--mono); font-size: .72rem; color: var(--ink-3); }
+.endbar { margin-top: 2rem; padding-top: 1.3rem; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .75rem 1.5rem; font-size: .92rem; color: var(--ink-2); }
+.endbar .copy { margin-left: .4rem; }
 
 .tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--bg); font: 500 .74rem/1.35 var(--mono); padding: .4rem .55rem; border-radius: 6px; white-space: nowrap; z-index: 5; }
 
@@ -175,6 +183,10 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
 </style>
 
 <div class="container-xl shell">
+  <nav class="topnav" aria-label="Site">
+    <a class="me" href="../index.html">Medozonuo Suohu<small>Bangalore</small></a>
+    <span class="switch"><span aria-current="page">With systems</span><a href="../with-team/index.html">With team</a></span>
+  </nav>
   <div class="row g-4 g-lg-5">
 
     <!-- Spec column -->
@@ -197,7 +209,6 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
           <a class="nav-link" href="#skills">Skills <small>28</small></a>
           <a class="nav-link" href="#education">Education <small>2014–18</small></a>
         </nav>
-        <div class="elsewhere"><a href="../with-team/index.html">With team →</a><a href="../index.html">Home</a></div>
       </div>
     </aside>
 
@@ -320,7 +331,10 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
       <section class="closing">
         <div class="label">Contact</div>
         <p>Building distributed systems that hold up at scale.</p>
-        <div class="colophon">medomag20@gmail.com · linkedin.com/in/magdalenesuo</div>
+        <div class="endbar">
+          <span><span id="foot-email">medomag20@gmail.com</span><button class="copy" id="cp-foot-email" type="button" data-target="foot-email">Copy</button></span>
+          <span><a href="https://linkedin.com/in/magdalenesuo" target="_blank" rel="noopener">LinkedIn</a> · <a href="../with-team/index.html">With team</a> · <a href="../index.html">Home</a></span>
+        </div>
       </section>
     </main>
   </div>
