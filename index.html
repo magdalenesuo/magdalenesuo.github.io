@@ -3,9 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Senior Software Engineer in distributed systems and data infrastructure: Spark at ~350 TB/day, Kafka-driven services, and platform reliability at Stripe.">
+<link rel="canonical" href="https://magdalenesuo.github.io/">
+<meta property="og:type" content="profile">
+<meta property="og:url" content="https://magdalenesuo.github.io/">
+<meta property="og:title" content="Medozonuo Suohu · Senior Software Engineer">
+<meta property="og:description" content="Senior Software Engineer in distributed systems and data infrastructure: Spark at ~350 TB/day, Kafka-driven services, and platform reliability at Stripe.">
+<meta property="og:image" content="https://magdalenesuo.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232B45C6'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-weight='700' font-size='14' fill='white' text-anchor='middle'%3EMS%3C/text%3E%3C/svg%3E">
 </head>
 <body>
-<title>Medozonuo Suohu Resume</title>
+<title>Medozonuo Suohu · Senior Software Engineer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -80,12 +91,37 @@ a:hover { color: var(--ink); }
 /* Record column */
 .record { min-width: 0; }
 .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; }
-.ring { position: relative; height: 340px; overflow: hidden; }
-.ring canvas { display: block; width: 100%; height: 100%; }
-.ring .cap { position: absolute; left: 1rem; top: .85rem; right: 1rem; display: flex; justify-content: space-between; gap: 1rem; pointer-events: none; }
-.ring .cap span { font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; color: var(--ink-3); }
-.ring .key { position: absolute; left: 1rem; bottom: .8rem; display: flex; gap: 1rem; flex-wrap: wrap; font-family: var(--mono); font-size: .68rem; color: var(--ink-3); pointer-events: none; }
-.ring .key i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: .35rem; vertical-align: 0; }
+.dest { position: relative; height: 320px; overflow: hidden; }
+.dest canvas { display: block; width: 100%; height: 100%; }
+.dest .cap { position: absolute; left: 1rem; top: .8rem; right: 1rem; pointer-events: none; }
+.dest .ttl { font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; color: var(--ink-3); }
+.dest .foot { position: absolute; left: 1rem; right: 1rem; bottom: .75rem; pointer-events: none; }
+.dest .stats { font-family: var(--mono); font-size: .7rem; color: var(--ink-2); }
+.dest .labels { position: absolute; inset: 0; pointer-events: none; }
+.dest .labels span { position: absolute; transform: translate(-50%, 0); font: 500 .72rem var(--mono); color: var(--ink); white-space: nowrap; background: color-mix(in srgb, var(--panel) 80%, transparent); padding: 0 .25rem; border-radius: 4px; }
+.dest .labels span.hub { color: var(--cobalt); }
+.case { padding: 1.3rem 1.4rem 1rem; }
+.case + .case { margin-top: 1rem; }
+.case-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .4rem 1rem; margin-bottom: .8rem; }
+.case h3 { font-family: var(--body); font-weight: 600; font-size: 1.15rem; margin: 0; text-wrap: balance; }
+.case .chip { font: 500 .74rem var(--mono); color: var(--cobalt); background: var(--cobalt-soft); border-radius: 999px; padding: .2rem .6rem; white-space: nowrap; }
+.case dl { display: grid; grid-template-columns: 8.5rem 1fr; gap: .55rem 1.1rem; margin: 0; }
+.case dt { font: 500 .72rem var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); padding-top: .2rem; }
+.case dd { margin: 0; max-width: 68ch; min-width: 0; }
+@media (max-width: 575.98px) { .case dl { grid-template-columns: 1fr; gap: .15rem; } .case dd { margin-bottom: .55rem; } }
+.herd { position: relative; height: 340px; overflow: hidden; margin-bottom: 1.1rem; background: var(--bg); }
+.herd canvas { display: block; width: 100%; height: 100%; }
+.herd .cap { position: absolute; left: 1rem; top: .75rem; right: .75rem; display: flex; justify-content: space-between; align-items: center; gap: .75rem; flex-wrap: wrap; pointer-events: none; }
+.herd .ttl { font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; color: var(--ink-3); }
+.herd .modes { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; pointer-events: auto; background: var(--panel); }
+.herd .modes button { border: 0; background: transparent; color: var(--ink-2); font: 500 .74rem var(--mono); padding: .3rem .7rem; cursor: pointer; }
+.herd .modes button[aria-pressed="true"] { background: var(--cobalt); color: var(--panel); }
+.herd .foot { position: absolute; left: 1rem; right: 1rem; bottom: .7rem; pointer-events: none; }
+.herd .note { margin: 0 0 .35rem; font-size: .84rem; color: var(--ink); max-width: 60ch; }
+.herd .row2 { display: flex; justify-content: space-between; gap: .5rem 1rem; flex-wrap: wrap; }
+.herd .stats { font-family: var(--mono); font-size: .7rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.herd .key { display: flex; gap: .9rem; flex-wrap: wrap; font-family: var(--mono); font-size: .68rem; color: var(--ink-3); }
+.herd .key i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: .35rem; }
 
 .summary { font-size: 1.12rem; line-height: 1.6; color: var(--ink); max-width: 64ch; margin: 1.5rem 0 0; }
 
@@ -147,7 +183,7 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
   #side-nav .nav-link { border: 1px solid var(--line); border-radius: 999px; padding: .25rem .8rem; }
   #side-nav .nav-link small { display: none; }
 }
-@media (max-width: 575.98px) { .ring { height: 280px; } .job { padding: 1.1rem 1rem .9rem; } }
+@media (max-width: 575.98px) { .herd { height: 330px; } .dest { height: 280px; } .job { padding: 1.1rem 1rem .9rem; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 </style>
 
@@ -160,15 +196,17 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
         <div class="label">Bangalore, India</div>
         <h1 class="name">Medozonuo <span>Suohu</span></h1>
         <p class="role">Senior Software Engineer</p>
-        <p class="focus">Distributed Systems &amp; Backend</p>
+        <p class="focus">Distributed Systems &amp; Data Infrastructure</p>
         <ul class="kv">
           <li><span class="k">LinkedIn</span><span class="v"><a href="https://linkedin.com/in/magdalenesuo" target="_blank" rel="noopener">linkedin.com/in/magdalenesuo</a></span></li>
+          <li><span class="k">Resume</span><span class="v"><a href="Medozonuo_Suohu_Resume.pdf" download>Download PDF</a></span></li>
           <li><span class="k">Now</span><span class="v">Senior Software Engineer, Stripe</span></li>
         </ul>
         <nav id="side-nav" class="nav" aria-label="Sections">
           <a class="nav-link" href="#overview">Overview <small>8+ yrs</small></a>
           <a class="nav-link" href="#experience">Experience <small>2018–now</small></a>
-          <a class="nav-link" href="#impact">Impact <small>3 results</small></a>
+          <a class="nav-link" href="#impact">Impact <small>4 results</small></a>
+          <a class="nav-link" href="#cases">Case studies <small>3</small></a>
           <a class="nav-link" href="#skills">Skills <small>28</small></a>
           <a class="nav-link" href="#education">Education <small>2014–18</small></a>
         </nav>
@@ -179,16 +217,17 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
     <main class="col-lg-8 record">
 
       <section id="overview">
-        <div class="panel ring" id="ring" role="img" aria-label="Animation: requests are hashed onto a ring and travel clockwise to the next of eight nodes, as in consistent hashing">
-          <div class="cap"><span>consistent hashing · 8 nodes</span><span>requests → next node clockwise</span></div>
-          <div class="key"><span><i style="background: var(--saffron)"></i>incoming request</span><span><i style="background: var(--cobalt)"></i>routed on ring</span></div>
+        <div class="panel dest" id="dest" role="img" aria-label="Illustration of Stripe Data Pipeline: datasets flow through one shared delivery framework into S3, SFTP, Snowflake and Redshift destinations.">
+          <div class="cap"><span class="ttl">Stripe Data Pipeline · one shared delivery path · illustration</span></div>
+          <div class="labels" id="dest-labels" aria-hidden="true"></div>
+          <div class="foot"><span class="stats">~90K transfer workflows/day · 2,500+ merchants · 105 datasets</span></div>
         </div>
-        <p class="summary">Software Engineer with 8+ years of experience building and scaling distributed systems and customer-facing platforms. Experienced across backend systems, data processing, cloud infrastructure, reliability, and platform engineering, with a track record of delivering high-impact products at scale.</p>
+        <p class="summary">Senior engineer with 8+ years building large-scale data infrastructure and distributed systems: Spark at ~350 TB/day, Kafka-driven services, and the platform and reliability work that delivers data to thousands of merchants on time.</p>
         <div class="row figures g-3">
           <div class="col-6 col-md-3"><div class="figure"><div class="n">$18M</div><div class="d">platform revenue contributed to</div></div></div>
           <div class="col-6 col-md-3"><div class="figure"><div class="n">2,500+</div><div class="d">merchants on automated data delivery</div></div></div>
           <div class="col-6 col-md-3"><div class="figure"><div class="n">~350<small>TB/day</small></div><div class="d">through optimized Spark pipelines</div></div></div>
-          <div class="col-6 col-md-3"><div class="figure"><div class="n">~90k<small>/day</small></div><div class="d">transfer workflows on shared components</div></div></div>
+          <div class="col-6 col-md-3"><div class="figure"><div class="n">$600K<small>/yr</small></div><div class="d">saved with one canonical Snowflake load</div></div></div>
         </div>
       </section>
 
@@ -200,27 +239,28 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
         <div class="mt-3">
           <article class="panel job">
             <header>
-              <h3>Senior Software Engineer <span class="at">· Stripe</span></h3>
+              <h3>Senior Software Engineer <span class="at">· Stripe · Stripe Data Pipeline (SDP)</span></h3>
               <span class="when">Jan 2022 – Present</span>
             </header>
             <ul>
-              <li>Owned and shipped core Stripe Data Pipeline capabilities across reporting exports, platform infrastructure, and new data destinations, powering automated data delivery for <b>2,500+</b> merchants including Shopify, OpenAI, Anthropic, and DoorDash and contributing to <b>$18M</b> in platform revenue.</li>
-              <li>Optimized Apache Spark and Spark SQL pipelines processing approximately <b>350 TB/day</b>, reducing p99 landing times from <b>9+ hours to under 5 hours</b> while increasing cloud storage throughput by <b>5×</b>.</li>
-              <li>Built reusable platform components supporting <b>105</b> datasets across multiple engineering teams and approximately <b>90,000</b> transfer workflows/day.</li>
-              <li>Drove reliability and observability improvements across SDP, reducing SDP-driven SLA misses by <b>78%</b> through workflow health, freshness monitoring, dependency tracking, and proactive alerting.</li>
-              <li>Led cross-functional platform initiatives across Product, Security, Billing, Core Data, Reporting, and Infrastructure, driving technical direction from design through rollout.</li>
-              <li>Founding UDAP engineer, shaping architecture, observability, and onboarding as the platform scaled; helped establish the SDP team in India and mentored engineers and interns in design, debugging, and project execution.</li>
+              <li>DRI for SDP's <b>S3, SFTP, Snowflake and Redshift</b> destinations: reusable transfer workflows and clients handling per-customer auth, region-aware storage, large files and retries, powering <b>2,500+ merchants</b> (Shopify, OpenAI, Anthropic, DoorDash) and <b>~$18M</b> in platform revenue.</li>
+              <li>Cut p99 landing time from <b>9+ hours to under 5</b> on <b>~350 TB/day</b> by diagnosing a YARN "thundering herd" (executor bursts at ~4x queue capacity causing hour-long allocations and preemptions); halved Spark thread pools and retuned queue priority and preemption. Storage throughput rose <b>5x</b>.</li>
+              <li>Lead DRI for SDP's reliability lockdown: cut SDP-driven SLA misses by <b>78%</b> via SLA-attribution dashboards and on-call workflows, then moved to <b>merchant-level SLA monitoring</b> (per-merchant freshness, silent-retry detection, entitlement checks) with deduplicated paging.</li>
+              <li>DRI for SDP's platformization: a shared delivery framework (event-driven triggers, transfer workflows, connectors, validation, retries, billing) replacing one-off SFTP and report pipelines; <b>105 datasets</b>, <b>~90K workflows/day</b>.</li>
+              <li>Saved <b>~$600K/year</b> for one of SDP's largest merchants by replacing duplicate full loads into two Snowflake destinations with one canonical load shared via views.</li>
+              <li>Founding engineer of UDAP, Stripe's batch data distribution platform: chose a shared, workflow-driven batch/file design over per-team pipelines or a new streaming layer; DRI for its handover to a new team.</li>
+              <li>Built the SDP and Stripe Reporting integration (<b>~20% of SDP onboarding</b>); helped build the SDP team in India and mentored engineers and interns.</li>
             </ul>
           </article>
           <article class="panel job">
             <header>
-              <h3>Software Engineer II <span class="at">· Recko Software Pvt. Ltd.</span></h3>
+              <h3>Software Engineer II <span class="at">· Recko Software Pvt. Ltd. · Data Acquisition</span></h3>
               <span class="when">Jun 2018 – Dec 2021</span>
             </header>
             <ul>
-              <li>Designed and optimized data ingestion pipelines processing approximately <b>300M rows/day</b>, improving scalability and reliability for financial reconciliation workloads.</li>
-              <li>Designed asynchronous, event-driven services using Apache Kafka for high-volume financial transaction processing.</li>
-              <li>Built a reusable integration framework simplifying onboarding of Stripe, Plaid, Razorpay, banking APIs, AWS, Azure, and cloud storage providers into the reconciliation platform.</li>
+              <li>Migrated reconciliation processing from Elasticsearch to Spark jobs reading from S3, handling <b>~300M rows/day</b>.</li>
+              <li>Built a Kafka-driven real-time queuing service (Java, MySQL) with state machines for idempotent processing.</li>
+              <li>Built a plug-and-play connector framework (Stripe, Plaid, Razorpay, banks, cloud storage); integrations took ~1 day.</li>
             </ul>
           </article>
         </div>
@@ -231,23 +271,78 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
         <h2>Measured impact</h2>
         <div class="swatches"><span><i style="background: var(--saffron)"></i>Before</span><span><i style="background: var(--cobalt)"></i>After</span></div>
         <div class="row g-3">
-          <div class="col-md-4"><div class="panel metric">
+          <div class="col-sm-6"><div class="panel metric">
             <h3>p99 landing time</h3><div class="u">hours · shorter is better</div>
             <div class="c"><canvas id="m-landing" aria-label="p99 landing time: more than 9 hours before, under 5 hours after"></canvas></div>
-            <p>9+ hours down to under 5 on ~350 TB/day.</p>
+            <p>9+ hours down to under 5 by fixing a YARN "thundering herd" of executor requests.</p>
           </div></div>
-          <div class="col-md-4"><div class="panel metric">
+          <div class="col-sm-6"><div class="panel metric">
             <h3>SDP-driven SLA misses</h3><div class="u">indexed, before = 100 · shorter is better</div>
             <div class="c"><canvas id="m-sla" aria-label="SLA misses: 100 before, 22 after, a 78 percent reduction"></canvas></div>
-            <p>Down 78% with health, freshness and dependency monitoring.</p>
+            <p>Down 78% with SLA-attribution dashboards and tighter on-call workflows.</p>
           </div></div>
-          <div class="col-md-4"><div class="panel metric">
+          <div class="col-sm-6"><div class="panel metric">
             <h3>Cloud storage throughput</h3><div class="u">relative to before · longer is better</div>
             <div class="c"><canvas id="m-thru" aria-label="Cloud storage throughput: 1 times before, 5 times after"></canvas></div>
             <p>Five times the throughput to cloud storage.</p>
           </div></div>
+          <div class="col-sm-6"><div class="panel metric">
+            <h3>Snowflake delivery cost</h3><div class="u">one large merchant, indexed · shorter is better</div>
+            <div class="c"><canvas id="m-cost" aria-label="Delivery cost for one large merchant halved, saving about 600 thousand dollars a year"></canvas></div>
+            <p>One canonical load shared via views instead of duplicate full loads: ~$600K/yr saved.</p>
+          </div></div>
         </div>
         <p class="fine">Landing-time bars show the reported bounds: at least 9 hours before, below 5 hours after.</p>
+      </section>
+
+      <section class="part" id="cases">
+        <div class="label">Case studies</div>
+        <h2>How the numbers happened</h2>
+        <p class="intro">Three problems from Stripe Data Pipeline, written without internal names or customer details.</p>
+
+        <article class="panel case">
+          <div class="case-head"><h3>Taming a scheduler thundering herd</h3><span class="chip">p99 landing: 9+ h → under 5 h</span></div>
+          <div class="panel herd" id="herd" role="img" aria-label="Illustration of a YARN thundering herd. Before the fix, bursts of Spark executor requests pile up waiting and running executors get preempted. After throttling the thread pools, requests flow steadily and the queue stays full.">
+            <div class="cap">
+              <span class="ttl">YARN queue under Spark executor requests · illustration</span>
+              <div class="modes" role="group" aria-label="Scheduler behavior">
+                <button type="button" id="mode-before" aria-pressed="true">Before</button><button type="button" id="mode-after" aria-pressed="false">After fix</button>
+              </div>
+            </div>
+            <div class="foot">
+              <p class="note" id="herd-note">Before: bursts of executor requests at ~4x queue capacity. Allocation stalls and preemptions churn executors.</p>
+              <div class="row2"><span class="stats" id="herd-stats">waiting 0 · running 0/24 · preempted 0</span>
+              <span class="key"><span><i style="background: var(--saffron)"></i>waiting</span><span><i style="background: var(--cobalt)"></i>running</span><span><i style="background: var(--ink-3)"></i>preempted</span></span></div>
+            </div>
+          </div>
+
+          <dl>
+            <dt>Problem</dt><dd>Spark workloads processing ~350 TB/day were landing late. p99 landing time was over 9 hours, and runs launched at peak hours were far slower than the same runs off-peak.</dd>
+            <dt>What I found</dt><dd>Lining up Spark and YARN metrics, queue dashboards and logs by launch hour showed the jobs weren't simply short on compute. They were flooding the scheduler with bursts of executor requests at nearly 4x the queue's capacity. At peak, executor allocation went from minutes to over an hour, and preemptions forced repeated retries.</dd>
+            <dt>What I changed</dt><dd>Halved the Spark thread pools that produced the bursts, added vCore headroom, and retuned queue priority and preemption so running executors stopped getting evicted.</dd>
+            <dt>Tradeoff</dt><dd>A small, deliberate increase in compute cost in exchange for predictable landing times.</dd>
+            <dt>Result</dt><dd>p99 landing time dropped from 9+ hours to under 5. The fix was the shape of the requests, not just more capacity.</dd>
+          </dl>
+        </article>
+
+        <article class="panel case">
+          <div class="case-head"><h3>From "did the job run?" to "did the merchant get their data?"</h3><span class="chip">SLA misses: −78%</span></div>
+          <dl>
+            <dt>Problem</dt><dd>Monitoring was run-level and dataset-wide. It could tell us a job ran, but not whether a specific merchant's data landed within their SLA, so some issues were first spotted by customers or account teams.</dd>
+            <dt>Phase 1</dt><dd>As lead DRI for the reliability lockdown, I focused on response: SLA-attribution dashboards and tighter on-call and acknowledgment workflows. SDP-driven SLA misses fell 78%.</dd>
+            <dt>Phase 2</dt><dd>Moved monitoring to merchant-level outcomes: freshness checked against each merchant's SLA, per-merchant staleness so one stale merchant can't hide inside a healthy dataset, detection of silently retrying workflow steps instead of waiting for long timeouts, entitlement and billing reconciliation, and health checks on external warehouses.</dd>
+            <dt>Paging</dt><dd>More signals shouldn't mean more pages. Alerts are deduplicated and carry blast-radius context, so one upstream outage produces one actionable page instead of one per dataset.</dd>
+          </dl>
+        </article>
+
+        <article class="panel case">
+          <div class="case-head"><h3>Load once, share twice</h3><span class="chip">~$600K/year saved</span></div>
+          <dl>
+            <dt>Problem</dt><dd>SDP delivers full loads. One of our largest merchants received the same data into two Snowflake destinations, so every load ran twice: double processing, double warehouse ingestion, double compute.</dd>
+            <dt>What I changed</dt><dd>Load the data once into a canonical location and expose it to the second destination through shared views instead of a second copy.</dd>
+            <dt>Result</dt><dd>Processing, warehouse and compute cost for that merchant roughly halved, saving about $600K a year.</dd>
+          </dl>
+        </article>
       </section>
 
       <section class="part" id="skills">
@@ -321,97 +416,226 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
     try { navigator.clipboard.writeText(el.textContent.trim()).then(() => flash('Copied'), select); } catch (e) { select(); }
   }));
 
-  /* ---------- Three.js: consistent-hashing ring ---------- */
-  (function ring() {
-    const host = document.getElementById('ring');
+  /* ---------- Three.js: YARN thundering herd (illustration) ---------- */
+  (function herd() {
+    const host = document.getElementById('herd');
     if (!window.THREE) return;
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
     host.prepend(renderer.domElement);
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 100);
-    camera.position.set(0, 6.2, 13.5);
-    camera.lookAt(0, -0.4, 0);
+    const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
     const world = new THREE.Group(); scene.add(world);
+    world.rotation.set(0.28, -0.32, 0);
 
-    const RAD = 4.3, NODES = 8, TAU = Math.PI * 2;
-    const ringPt = (a, out) => out.set(Math.cos(a) * RAD, 0, Math.sin(a) * RAD);
-
-    const ringMat = new THREE.LineBasicMaterial({ transparent: true, opacity: 0.9 });
-    const pts = []; for (let i = 0; i <= 128; i++) pts.push(ringPt(i / 128 * TAU, new THREE.Vector3()));
-    world.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), ringMat));
-
-    // hash-space ticks
-    const tickMat = new THREE.LineBasicMaterial({ transparent: true, opacity: 0.5 });
-    const tickPts = [];
-    for (let i = 0; i < 64; i++) {
-      const a = i / 64 * TAU, r0 = RAD - 0.12, r1 = RAD + 0.12;
-      tickPts.push(new THREE.Vector3(Math.cos(a) * r0, 0, Math.sin(a) * r0), new THREE.Vector3(Math.cos(a) * r1, 0, Math.sin(a) * r1));
+    const COLS = 6, ROWS = 4, CAP = COLS * ROWS, GAP = 0.62;
+    const slotX = c => 2.5 + c * GAP, slotY = r => (r - (ROWS - 1) / 2) * GAP;
+    const lineMat = new THREE.LineBasicMaterial({ transparent: true, opacity: 0.8 });
+    const faintMat = new THREE.LineBasicMaterial({ transparent: true, opacity: 0.45 });
+    const slotEdge = new THREE.EdgesGeometry(new THREE.BoxGeometry(0.46, 0.46, 0.46));
+    for (let i = 0; i < CAP; i++) {
+      const l = new THREE.LineSegments(slotEdge, faintMat);
+      l.position.set(slotX(i % COLS), slotY(Math.floor(i / COLS)), 0); world.add(l);
     }
-    world.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(tickPts), tickMat));
+    const qw = COLS * GAP + 0.3, qh = ROWS * GAP + 0.3;
+    const frame = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(qw, qh, 0.9)), lineMat);
+    frame.position.set(slotX(0) + (COLS - 1) * GAP / 2, 0, 0); world.add(frame);
+    const gate = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(1.85, -1.9, 0), new THREE.Vector3(1.85, 1.9, 0)]), lineMat);
+    world.add(gate);
+    const DRIVER = new THREE.Vector3(-6.3, 0, 0);
+    const driverMat = new THREE.MeshBasicMaterial({ wireframe: true });
+    const driver = new THREE.Mesh(new THREE.IcosahedronGeometry(0.6, 1), driverMat);
+    driver.position.copy(DRIVER); world.add(driver);
 
-    // nodes at uneven (hashed) positions
-    const nodeAngles = [0.15, 0.9, 1.45, 2.4, 3.2, 3.85, 4.9, 5.6];
-    const nodeMat = new THREE.MeshBasicMaterial();
-    const edgeMat = new THREE.LineBasicMaterial();
-    const boxGeo = new THREE.BoxGeometry(0.46, 0.46, 0.46);
-    const edgeGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(0.62, 0.62, 0.62));
-    const nodes = nodeAngles.map(a => {
-      const g = new THREE.Group();
-      ringPt(a, g.position);
-      g.add(new THREE.Mesh(boxGeo, nodeMat));
-      g.add(new THREE.LineSegments(edgeGeo, edgeMat));
-      g.userData = { a, pulse: 0 };
-      world.add(g);
-      return g;
-    });
-    const nextNode = a => {
-      let best = 0, bestD = Infinity;
-      nodeAngles.forEach((n, i) => { const d = ((n - a) % TAU + TAU) % TAU; if (d < bestD) { bestD = d; best = i; } });
-      return { i: best, d: bestD };
+    const mats = { wait: new THREE.MeshBasicMaterial(), run: new THREE.MeshBasicMaterial(), pre: new THREE.MeshBasicMaterial() };
+    const geo = new THREE.BoxGeometry(0.32, 0.32, 0.32);
+    const ex = Array.from({ length: 110 }, () => { const m = new THREE.Mesh(geo, mats.wait); m.visible = false; world.add(m); return { m, s: 'idle', t: 0, slot: -1, life: 0 }; });
+    const slots = new Array(CAP).fill(null);
+    let waiting = [], mode = 'before', spawnClock = 0, admitClock = 0, preempted = 0;
+    const CFG = { before: { burst: 44, every: 3.2, admit: 3.5, preempt: 0.8 }, after: { rate: 5.6, admit: 14, preempt: 0 } };
+    const tmp = new THREE.Vector3();
+    const waitSpot = (i, out) => out.set(1.3 - (i % 8) * 0.42, ((Math.floor(i / 8) % 7) - 3) * 0.42, 0);
+
+    function spawn(n) {
+      for (const e of ex) {
+        if (n <= 0) break;
+        if (e.s !== 'idle') continue;
+        e.s = 'wait'; e.m.visible = true; e.m.material = mats.wait; e.m.scale.setScalar(1); e.m.rotation.set(0, 0, 0);
+        e.m.position.set(DRIVER.x + 0.4, DRIVER.y + (Math.random() - 0.5) * 0.9, (Math.random() - 0.5) * 0.9);
+        waiting.push(e); n--;
+      }
+    }
+    function step(dt) {
+      const c = CFG[mode];
+      if (mode === 'before') { spawnClock += dt; if (spawnClock >= c.every) { spawnClock = 0; spawn(c.burst); } }
+      else { spawnClock += dt * c.rate; while (spawnClock >= 1) { spawnClock -= 1; spawn(1); } }
+      admitClock = Math.min(admitClock + dt * c.admit, 3);
+      while (admitClock >= 1 && waiting.length) {
+        const free = slots.indexOf(null); if (free < 0) break;
+        const e = waiting.shift(); slots[free] = e; e.s = 'run'; e.slot = free; e.life = 3.4 + Math.random(); e.m.material = mats.run; admitClock -= 1;
+      }
+      if (c.preempt && Math.random() < c.preempt * dt) {
+        const busy = []; slots.forEach((e, i) => { if (e) busy.push(i); });
+        if (busy.length) { const i = busy[Math.floor(Math.random() * busy.length)], e = slots[i]; slots[i] = null; e.s = 'pre'; e.t = 0.8; e.slot = -1; e.m.material = mats.pre; preempted++; }
+      }
+      const k = Math.min(1, dt * 5);
+      waiting.forEach((e, i) => { waitSpot(i, tmp); e.m.position.lerp(tmp, k); });
+      for (const e of ex) {
+        if (e.s === 'run') {
+          tmp.set(slotX(e.slot % COLS), slotY(Math.floor(e.slot / COLS)), 0); e.m.position.lerp(tmp, Math.min(1, dt * 6));
+          e.m.rotation.y += dt * 1.2; e.life -= dt;
+          if (e.life <= 0) { slots[e.slot] = null; e.slot = -1; e.s = 'done'; e.t = 0.35; }
+        } else if (e.s === 'done') {
+          e.t -= dt; e.m.scale.setScalar(Math.max(0.01, e.t / 0.35)); if (e.t <= 0) { e.s = 'idle'; e.m.visible = false; }
+        } else if (e.s === 'pre') {
+          e.t -= dt; e.m.position.y += dt * 2.6; e.m.position.x -= dt * 2.2;
+          if (e.t <= 0) { e.s = 'wait'; e.m.material = mats.wait; waiting.push(e); }
+        }
+      }
+    }
+
+    const stats = document.getElementById('herd-stats'), note = document.getElementById('herd-note');
+    const btnB = document.getElementById('mode-before'), btnA = document.getElementById('mode-after');
+    const NOTES = {
+      before: 'Before: bursts of executor requests at ~4x queue capacity. Allocation stalls and preemptions churn executors.',
+      after: 'After: thread pools halved and queue preemption retuned. Requests arrive at a pace the scheduler can serve, so the queue stays full.'
     };
+    function showStats() {
+      stats.textContent = `waiting ${waiting.length} · running ${slots.filter(Boolean).length}/${CAP} · preempted ${preempted}`;
+    }
+    function reset() {
+      ex.forEach(e => { e.s = 'idle'; e.m.visible = false; e.slot = -1; });
+      slots.fill(null); waiting = []; spawnClock = 0; admitClock = 0; preempted = 0;
+    }
+    function setMode(m, user) {
+      mode = m; preempted = 0;
+      if (user) userChose = true;
+      btnB.setAttribute('aria-pressed', String(m === 'before')); btnA.setAttribute('aria-pressed', String(m === 'after'));
+      note.textContent = NOTES[m];
+      if (reduceMotion) staticFrame();
+    }
+    let userChose = false;
+    btnB.addEventListener('click', () => setMode('before', true));
+    btnA.addEventListener('click', () => setMode('after', true));
+
+    function paint() {
+      mats.wait.color.set(tok('--saffron')); mats.run.color.set(tok('--cobalt')); mats.pre.color.set(tok('--ink-3'));
+      lineMat.color.set(tok('--ink-3')); faintMat.color.set(tok('--line')); driverMat.color.set(tok('--cobalt'));
+      renderer.render(scene, camera);
+    }
+    function resize() {
+      const w = host.clientWidth, h = host.clientHeight;
+      if (!w || !h) return;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      const need = 15.5 / camera.aspect / (2 * Math.tan(16 * Math.PI / 180));
+      camera.position.set(-0.2, 0.2, Math.max(15, need)); camera.lookAt(-0.2, -0.15, 0);
+      camera.updateProjectionMatrix();
+      renderer.render(scene, camera);
+    }
+    function staticFrame() {
+      reset();
+      for (let i = 0; i < 360; i++) step(1 / 30);
+      showStats(); renderer.render(scene, camera);
+    }
+    onTheme(paint);
+    new ResizeObserver(resize).observe(host);
+    resize(); paint();
+    if (reduceMotion) { staticFrame(); return; }
+
+    // warm up so the first frame already shows the problem
+    for (let i = 0; i < 240; i++) step(1 / 30);
+    showStats(); renderer.render(scene, camera);
+
+    let visible = true, last = performance.now(), sinceSwitch = 0, statClock = 0, time = 0;
+    new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(host);
+    (function loop(now) {
+      requestAnimationFrame(loop);
+      const dt = Math.min(0.05, (now - last) / 1000); last = now;
+      if (!visible) return;
+      time += dt; sinceSwitch += dt; statClock += dt;
+      if (!userChose && sinceSwitch > 11) { sinceSwitch = 0; setMode(mode === 'before' ? 'after' : 'before', false); }
+      step(dt);
+      driver.rotation.y += dt * 0.6;
+      world.rotation.y = -0.32 + Math.sin(time * 0.25) * 0.05;
+      if (statClock > 0.25) { statClock = 0; showStats(); }
+      renderer.render(scene, camera);
+    })(last);
+  })();
+
+  /* ---------- Three.js: SDP destinations flow (illustration) ---------- */
+  (function dest() {
+    const host = document.getElementById('dest');
+    if (!window.THREE) return;
+    const labelsEl = document.getElementById('dest-labels');
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+    host.prepend(renderer.domElement);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
+    const world = new THREE.Group(); scene.add(world);
+    world.rotation.x = -0.1;
+    const V = (x, y, z) => new THREE.Vector3(x, y, z || 0);
+    const sources = [V(-6.4, 2.2), V(-6.4, 0.7), V(-6.4, -0.8), V(-6.4, -2.3)];
+    const hub = V(-0.6, 0, 0);
+    const dests = [
+      { name: 'S3', p: V(5.6, 2.4) }, { name: 'SFTP', p: V(5.6, 0.8) },
+      { name: 'Snowflake', p: V(5.6, -0.8) }, { name: 'Redshift', p: V(5.6, -2.4) }
+    ];
+    const cin = sources.map(s => new THREE.QuadraticBezierCurve3(s, V(-3.6, s.y * 0.7, 0.8), hub));
+    const cout = dests.map(d => new THREE.QuadraticBezierCurve3(hub, V(2.6, d.p.y * 0.8, -0.8), d.p));
+    const lineMat = new THREE.LineBasicMaterial({ transparent: true, opacity: 0.6 });
+    [...cin, ...cout].forEach(c => world.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(c.getPoints(40)), lineMat)));
+    const srcMat = new THREE.MeshBasicMaterial();
+    const srcGeo = new THREE.BoxGeometry(0.34, 0.34, 0.34);
+    sources.forEach(p => { const m = new THREE.Mesh(srcGeo, srcMat); m.position.copy(p); world.add(m); });
+    const hubMat = new THREE.MeshBasicMaterial({ wireframe: true });
+    const hubMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(0.95, 1), hubMat); hubMesh.position.copy(hub); world.add(hubMesh);
+    const destMat = new THREE.MeshBasicMaterial();
+    const destEdgeMat = new THREE.LineBasicMaterial();
+    const destNodes = dests.map(d => {
+      const g = new THREE.Group(); g.position.copy(d.p);
+      g.add(new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.42, 20), destMat));
+      g.add(new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.CylinderGeometry(0.42, 0.42, 0.55, 20)), destEdgeMat));
+      g.userData.pulse = 0; world.add(g); return g;
+    });
 
     const sc = document.createElement('canvas'); sc.width = sc.height = 64;
-    const sx = sc.getContext('2d'); sx.fillStyle = '#fff'; sx.beginPath(); sx.arc(32, 32, 28, 0, TAU); sx.fill();
-    const N = 70;
-    const pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
-    const ptMat = new THREE.PointsMaterial({ size: 0.26, map: new THREE.CanvasTexture(sc), vertexColors: true, transparent: true, alphaTest: 0.4 });
-    world.add(new THREE.Points(geo, ptMat));
-
-    const cIn = new THREE.Color(), cRing = new THREE.Color();
-    const tmp = new THREE.Vector3();
-    function spawn(p, t0) {
-      const th = Math.random() * TAU, el = 0.35 + Math.random() * 0.9, r = 8 + Math.random() * 2;
-      p.from = new THREE.Vector3(Math.cos(th) * Math.cos(el) * r, Math.sin(el) * r * 0.8, Math.sin(th) * Math.cos(el) * r);
-      p.hash = Math.random() * TAU;
-      const nn = nextNode(p.hash);
-      p.node = nn.i; p.arc = nn.d;
-      p.t = t0; p.inDur = 1 + Math.random() * 0.6; p.ringDur = 0.25 + nn.d * 0.55;
-    }
-    const parts = Array.from({ length: N }, () => { const p = {}; spawn(p, 0); p.t = Math.random() * (p.inDur + p.ringDur); return p; });
-
+    const sx = sc.getContext('2d'); sx.fillStyle = '#fff'; sx.beginPath(); sx.arc(32, 32, 28, 0, Math.PI * 2); sx.fill();
+    const N = 150, pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
+    const pgeo = new THREE.BufferGeometry();
+    pgeo.setAttribute('position', new THREE.BufferAttribute(pos, 3)); pgeo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    const pmat = new THREE.PointsMaterial({ size: 0.2, map: new THREE.CanvasTexture(sc), vertexColors: true, transparent: true, alphaTest: 0.4 });
+    world.add(new THREE.Points(pgeo, pmat));
+    const pick = n => Math.floor(Math.random() * n);
+    const packets = Array.from({ length: N }, () => ({ a: pick(4), b: pick(4), t: Math.random(), v: 0.16 + Math.random() * 0.12 }));
+    const cA = new THREE.Color(), cB = new THREE.Color(), tmp = new THREE.Vector3();
     function place() {
-      parts.forEach((p, i) => {
+      packets.forEach((p, i) => {
         let c;
-        if (p.t < p.inDur) {
-          const k = p.t / p.inDur, e = k * k * (3 - 2 * k);
-          ringPt(p.hash, tmp); tmp.lerpVectors(p.from, tmp.clone(), e); c = cIn;
-        } else {
-          const k = Math.min(1, (p.t - p.inDur) / p.ringDur);
-          ringPt(p.hash + p.arc * k, tmp); tmp.y = 0.02; c = cRing;
-        }
+        if (p.t < 0.5) { cin[p.a].getPoint(p.t * 2, tmp); c = cA; } else { cout[p.b].getPoint((p.t - 0.5) * 2, tmp); c = cB; }
         pos[i * 3] = tmp.x; pos[i * 3 + 1] = tmp.y; pos[i * 3 + 2] = tmp.z;
         col[i * 3] = c.r; col[i * 3 + 1] = c.g; col[i * 3 + 2] = c.b;
       });
-      geo.attributes.position.needsUpdate = true; geo.attributes.color.needsUpdate = true;
+      pgeo.attributes.position.needsUpdate = true; pgeo.attributes.color.needsUpdate = true;
+    }
+
+    const labelDefs = [{ text: 'datasets', p: V(-6.4, 2.2), dy: -30 }, { text: 'SDP', p: hub, dy: -42, cls: 'hub' }, ...dests.map(d => ({ text: d.name, p: d.p, dy: 18 }))];
+    const labelEls = labelDefs.map(d => { const s = document.createElement('span'); s.textContent = d.text; if (d.cls) s.className = d.cls; labelsEl.appendChild(s); return s; });
+    const proj = new THREE.Vector3();
+    function placeLabels() {
+      const w = host.clientWidth, h = host.clientHeight;
+      world.updateMatrixWorld();
+      labelDefs.forEach((d, i) => {
+        proj.copy(d.p).applyMatrix4(world.matrixWorld).project(camera);
+        labelEls[i].style.left = ((proj.x + 1) / 2 * w) + 'px';
+        labelEls[i].style.top = ((1 - proj.y) / 2 * h + d.dy) + 'px';
+      });
     }
     function paint() {
-      cIn.set(tok('--saffron')); cRing.set(tok('--cobalt'));
-      ringMat.color.set(tok('--ink-3')); tickMat.color.set(tok('--line'));
-      nodeMat.color.set(tok('--cobalt')); edgeMat.color.set(tok('--cobalt'));
+      cA.set(tok('--cobalt')); cB.set(tok('--saffron'));
+      lineMat.color.set(tok('--line')); srcMat.color.set(tok('--ink-3'));
+      hubMat.color.set(tok('--cobalt')); destMat.color.set(tok('--cobalt')); destEdgeMat.color.set(tok('--cobalt'));
       place(); renderer.render(scene, camera);
     }
     function resize() {
@@ -419,34 +643,28 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
       if (!w || !h) return;
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
-      const f = w / h < 1.6 ? 1.6 / (w / h) : 1;
-      camera.position.set(0, 6.2 * f, 13.5 * f); camera.lookAt(0, -0.4, 0);
+      const need = 14.5 / camera.aspect / (2 * Math.tan(17 * Math.PI / 180));
+      camera.position.set(-0.4, 0, Math.max(13, need)); camera.lookAt(-0.4, -0.1, 0);
       camera.updateProjectionMatrix();
-      renderer.render(scene, camera);
+      renderer.render(scene, camera); placeLabels();
     }
     onTheme(paint);
     new ResizeObserver(resize).observe(host);
     resize(); paint();
     if (reduceMotion) return;
-
     let visible = true, last = performance.now();
     new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(host);
     (function loop(now) {
       requestAnimationFrame(loop);
       const dt = Math.min(0.05, (now - last) / 1000); last = now;
       if (!visible) return;
-      parts.forEach(p => {
-        p.t += dt;
-        if (p.t >= p.inDur + p.ringDur) { nodes[p.node].userData.pulse = 1; spawn(p, 0); }
+      packets.forEach(p => {
+        p.t += p.v * dt;
+        if (p.t > 1) { destNodes[p.b].userData.pulse = 1; p.t -= 1; p.a = pick(4); p.b = pick(4); }
       });
-      nodes.forEach(n => {
-        n.userData.pulse *= 0.9;
-        const s = 1 + n.userData.pulse * 0.6; n.scale.set(s, s, s);
-        n.rotation.y += 0.01;
-      });
-      world.rotation.y += dt * 0.12;
-      place();
-      renderer.render(scene, camera);
+      destNodes.forEach(n => { n.userData.pulse *= 0.9; const s = 1 + n.userData.pulse * 0.35; n.scale.set(s, s, s); });
+      hubMesh.rotation.y += dt * 0.5; hubMesh.rotation.x += dt * 0.2;
+      place(); renderer.render(scene, camera);
     })(last);
   })();
 
@@ -643,7 +861,8 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
     const specs = [
       { id: 'm-landing', data: [9, 5], labels: ['9+ h', '< 5 h'], max: 12, tick: v => v + 'h', tip: ['9+ hours', 'under 5 hours'] },
       { id: 'm-sla', data: [100, 22], labels: ['100', '22'], max: 130, tick: v => v, tip: ['100 (baseline)', '22 (−78%)'] },
-      { id: 'm-thru', data: [1, 5], labels: ['1×', '5×'], max: 6.5, tick: v => v + '×', tip: ['1× (baseline)', '5×'] }
+      { id: 'm-thru', data: [1, 5], labels: ['1×', '5×'], max: 6.5, tick: v => v + '×', tip: ['1× (baseline)', '5×'] },
+      { id: 'm-cost', data: [100, 50], labels: ['100', '50'], max: 130, tick: v => v, tip: ['100 (two full loads)', '50 (one load + views, ~$600K/yr saved)'] }
     ];
     const charts = specs.map(s => new Chart(document.getElementById(s.id), {
       type: 'bar',
