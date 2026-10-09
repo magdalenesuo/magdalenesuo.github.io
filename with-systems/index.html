@@ -204,8 +204,8 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
         <nav id="side-nav" class="nav" aria-label="Sections">
           <a class="nav-link" href="#overview">Overview <small>8+ yrs</small></a>
           <a class="nav-link" href="#experience">Experience <small>2018–now</small></a>
-          <a class="nav-link" href="#impact">Impact <small>4 results</small></a>
-          <a class="nav-link" href="#stories">Stories <small>2</small></a>
+          <a class="nav-link" href="#impact">Impact <small>3 results</small></a>
+          <a class="nav-link" href="#stories">Stories <small>3</small></a>
           <a class="nav-link" href="#skills">Skills <small>28</small></a>
           <a class="nav-link" href="#education">Education <small>2014–18</small></a>
         </nav>
@@ -226,7 +226,7 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
           <div class="col-6 col-md-3"><div class="figure"><div class="n">$18M</div><div class="d">platform revenue contributed to</div></div></div>
           <div class="col-6 col-md-3"><div class="figure"><div class="n">2,500+</div><div class="d">merchants on automated data delivery</div></div></div>
           <div class="col-6 col-md-3"><div class="figure"><div class="n">~350<small>TB/day</small></div><div class="d">through optimized Spark pipelines</div></div></div>
-          <div class="col-6 col-md-3"><div class="figure"><div class="n">$600K<small>/yr</small></div><div class="d">saved with one canonical Snowflake load</div></div></div>
+          <div class="col-6 col-md-3"><div class="figure"><div class="n">$636K<small>/yr</small></div><div class="d">projected savings from a shared-load design</div></div></div>
         </div>
       </section>
 
@@ -246,7 +246,7 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
               <li>Cut p99 landing time from <b>9+ hours to under 5</b> on <b>~350 TB/day</b> by diagnosing a YARN "thundering herd" (executor bursts at ~4x queue capacity causing hour-long allocations and preemptions); halved Spark thread pools and retuned queue priority and preemption. Storage throughput rose <b>5x</b>.</li>
               <li>Lead DRI for SDP's reliability lockdown: cut SDP-driven SLA misses by <b>78%</b> via SLA-attribution dashboards and on-call workflows, then moved to <b>merchant-level SLA monitoring</b> (per-merchant freshness, silent-retry detection, entitlement checks) with deduplicated paging.</li>
               <li>DRI for SDP's platformization: a shared delivery framework (event-driven triggers, transfer workflows, connectors, validation, retries, billing) replacing one-off SFTP and report pipelines; <b>105 datasets</b>, <b>~90K workflows/day</b>.</li>
-              <li>Saved <b>~$600K/year</b> for one of SDP's largest merchants by replacing duplicate full loads into two Snowflake destinations with one canonical load shared via views.</li>
+              <li>Designed a shared-load architecture for one of SDP's largest merchants: one canonical Snowflake load, fanned out per destination behind an exact-equivalence gate, projected to save <b>~$636K/year</b> (prototype: ~29% fewer compute credits).</li>
               <li>Founding engineer of UDAP, Stripe's batch data distribution platform: chose a shared, workflow-driven batch/file design over per-team pipelines or a new streaming layer; DRI for its handover to a new team.</li>
               <li>Built the SDP and Stripe Reporting integration (<b>~20% of SDP onboarding</b>); helped build the SDP team in India and mentored engineers and interns.</li>
             </ul>
@@ -270,25 +270,20 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
         <h2>Measured impact</h2>
         <div class="swatches"><span><i style="background: var(--saffron)"></i>Before</span><span><i style="background: var(--cobalt)"></i>After</span></div>
         <div class="row g-3">
-          <div class="col-sm-6"><div class="panel metric">
+          <div class="col-md-4"><div class="panel metric">
             <h3>p99 landing time</h3><div class="u">hours · shorter is better</div>
             <div class="c"><canvas id="m-landing" aria-label="p99 landing time: more than 9 hours before, under 5 hours after"></canvas></div>
             <p>9+ hours down to under 5 by fixing a YARN "thundering herd" of executor requests.</p>
           </div></div>
-          <div class="col-sm-6"><div class="panel metric">
+          <div class="col-md-4"><div class="panel metric">
             <h3>SDP-driven SLA misses</h3><div class="u">indexed, before = 100 · shorter is better</div>
             <div class="c"><canvas id="m-sla" aria-label="SLA misses: 100 before, 22 after, a 78 percent reduction"></canvas></div>
             <p>Down 78% with SLA-attribution dashboards and tighter on-call workflows.</p>
           </div></div>
-          <div class="col-sm-6"><div class="panel metric">
+          <div class="col-md-4"><div class="panel metric">
             <h3>Cloud storage throughput</h3><div class="u">relative to before · longer is better</div>
             <div class="c"><canvas id="m-thru" aria-label="Cloud storage throughput: 1 times before, 5 times after"></canvas></div>
             <p>Five times the throughput to cloud storage.</p>
-          </div></div>
-          <div class="col-sm-6"><div class="panel metric">
-            <h3>Snowflake delivery cost</h3><div class="u">one large merchant, indexed · shorter is better</div>
-            <div class="c"><canvas id="m-cost" aria-label="Delivery cost for one large merchant halved, saving about 600 thousand dollars a year"></canvas></div>
-            <p>One canonical load shared via views instead of duplicate full loads: ~$600K/yr saved.</p>
           </div></div>
         </div>
         <p class="fine">Landing-time bars show the reported bounds: at least 9 hours before, below 5 hours after.</p>
@@ -297,10 +292,11 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
       <section class="part" id="stories">
         <div class="label">Behind the numbers</div>
         <h2>Curious how it worked?</h2>
-        <p class="intro">Short write-ups of two problems from Stripe Data Pipeline: what broke, what I found, and what I changed.</p>
+        <p class="intro">Short write-ups of three problems from building a large-scale data delivery platform: what broke, what I found, and what I changed.</p>
         <div class="row g-3">
-          <div class="col-md-6"><a class="panel teaser" href="notes.html#herd-story"><span class="chip">p99: 9+ h → under 5 h</span><h3>Taming a scheduler thundering herd</h3><p>Why more capacity alone wasn't the fix, and what was.</p><span class="more">Read the story →</span></a></div>
-          <div class="col-md-6"><a class="panel teaser" href="notes.html#sla-story"><span class="chip">SLA misses: −78%</span><h3>Did the merchant get their data?</h3><p>Why "the job ran" wasn't good enough, and how monitoring moved to merchant-level SLAs.</p><span class="more">Read the story →</span></a></div>
+          <div class="col-md-4"><a class="panel teaser" href="notes.html#herd-story"><span class="chip">p99: 9+ h → under 5 h</span><h3>Taming a scheduler thundering herd</h3><p>Why more capacity alone wasn't the fix, and what was.</p><span class="more">Read the story →</span></a></div>
+          <div class="col-md-4"><a class="panel teaser" href="notes.html#sla-story"><span class="chip">SLA misses: −78%</span><h3>Did the customer get their data?</h3><p>Why "the job ran" wasn't good enough, and how monitoring moved to customer-level SLAs.</p><span class="more">Read the story →</span></a></div>
+          <div class="col-md-4"><a class="panel teaser" href="notes.html#load-story"><span class="chip">Projected ~$636K/year</span><h3>Load once, deliver twice</h3><p>Two identical deliveries were doing the same work twice. How an exact-equivalence gate lets them share it safely.</p><span class="more">Read the story →</span></a></div>
         </div>
       </section>
 
@@ -676,8 +672,7 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
     const specs = [
       { id: 'm-landing', data: [9, 5], labels: ['9+ h', '< 5 h'], max: 12, tick: v => v + 'h', tip: ['9+ hours', 'under 5 hours'] },
       { id: 'm-sla', data: [100, 22], labels: ['100', '22'], max: 130, tick: v => v, tip: ['100 (baseline)', '22 (−78%)'] },
-      { id: 'm-thru', data: [1, 5], labels: ['1×', '5×'], max: 6.5, tick: v => v + '×', tip: ['1× (baseline)', '5×'] },
-      { id: 'm-cost', data: [100, 50], labels: ['100', '50'], max: 130, tick: v => v, tip: ['100 (two full loads)', '50 (one load + views, ~$600K/yr saved)'] }
+      { id: 'm-thru', data: [1, 5], labels: ['1×', '5×'], max: 6.5, tick: v => v + '×', tip: ['1× (baseline)', '5×'] }
     ];
     const charts = specs.map(s => new Chart(document.getElementById(s.id), {
       type: 'bar',

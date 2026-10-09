@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Behind the Numbers · Medozonuo Suohu</title>
-<meta name="description" content="Short engineering stories from Stripe Data Pipeline: a scheduler thundering herd and merchant-level SLA monitoring.">
+<meta name="description" content="Short engineering stories from building a large-scale data delivery platform: a scheduler thundering herd, customer-level SLA monitoring, and a shared-load warehouse design.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
@@ -73,6 +73,23 @@ article.story { padding-top: clamp(2.5rem, 7vw, 4rem); scroll-margin-top: 1rem; 
 .story ul { padding-left: 1.2rem; margin: 0 0 .8rem; }
 .story li { margin-bottom: .35rem; }
 .story li::marker { color: var(--ink-3); }
+.flowd { margin: 1.4rem 0 .4rem; padding: 1rem; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); overflow-x: auto; }
+.fd-label { font: 500 .7rem var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin: .2rem 0 .45rem; }
+.fd-label + .fd-row { margin-top: 0; }
+.fd-row { display: flex; align-items: center; gap: .35rem; margin-bottom: .45rem; min-width: max-content; }
+.fd-row + .fd-label { margin-top: .9rem; }
+.fd-name { width: 7.5rem; flex: none; font: 500 .74rem var(--mono); color: var(--ink-2); }
+.fd-row span.dup, .fd-row span.shared, .fd-row span.own { font: 500 .74rem var(--mono); padding: .25rem .55rem; border-radius: 6px; white-space: nowrap; }
+.dup { background: color-mix(in srgb, var(--saffron) 16%, transparent); color: var(--ink); border: 1px dashed var(--saffron); }
+.shared { background: var(--cobalt-soft); color: var(--ink); border: 1px solid var(--cobalt); }
+.own { background: transparent; color: var(--ink-2); border: 1px solid var(--line); }
+.fd-fork { color: var(--ink-3); padding: 0 .15rem; }
+.fd-out { display: inline-flex; flex-direction: column; gap: .3rem; }
+.fd-key { display: flex; flex-wrap: wrap; gap: .5rem 1.1rem; margin-top: .8rem; font-size: .76rem; color: var(--ink-3); }
+.fd-key i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: .35rem; vertical-align: -1px; }
+.k-dup { background: color-mix(in srgb, var(--saffron) 16%, transparent); border: 1px dashed var(--saffron); }
+.k-shared { background: var(--cobalt-soft); border: 1px solid var(--cobalt); }
+.k-own { border: 1px solid var(--line); }
 .takeaway { border-left: 3px solid var(--saffron); padding: .2rem 0 .2rem 1rem; margin: 1.4rem 0 0; color: var(--ink); font-weight: 500; }
 .herd { position: relative; height: 340px; overflow: hidden; margin-bottom: 1.1rem; background: var(--bg); }
 .herd canvas { display: block; width: 100%; height: 100%; }
@@ -103,11 +120,12 @@ article.story { padding-top: clamp(2.5rem, 7vw, 4rem); scroll-margin-top: 1rem; 
   <header>
     <div class="label" style="margin-top:1.5rem">Behind the numbers</div>
     <h1>How the numbers happened</h1>
-    <p class="lede">Two problems from Stripe Data Pipeline, the platform that delivers Stripe data to thousands of merchants: what broke, what I found, and what I changed. Written without internal names or customer details.</p>
+    <p class="lede">Three problems from building a large-scale data delivery platform, one that loads scheduled datasets into customers' cloud storage and data warehouses: what broke, what I found, and what I changed. Written without company-specific names or details.</p>
   </header>
   <ol class="toc">
     <li><a href="#herd-story">Taming a scheduler thundering herd <small>p99: 9+ h → under 5 h</small></a></li>
-    <li><a href="#sla-story">Did the merchant get their data? <small>SLA misses: −78%</small></a></li>
+    <li><a href="#sla-story">Did the customer get their data? <small>SLA misses: −78%</small></a></li>
+    <li><a href="#load-story">Load once, deliver twice <small>Projected ~$636K/year</small></a></li>
   </ol>
 
   <article class="story" id="herd-story">
@@ -144,24 +162,55 @@ article.story { padding-top: clamp(2.5rem, 7vw, 4rem); scroll-margin-top: 1rem; 
   </article>
 
   <article class="story" id="sla-story">
-    <span class="chip">SDP-driven SLA misses: −78%</span>
-    <h2>From "did the job run?" to "did the merchant get their data?"</h2>
+    <span class="chip">SLA misses: −78%</span>
+    <h2>From "did the job run?" to "did the customer get their data?"</h2>
     <h3>The problem</h3>
-    <p>Monitoring was run-level and dataset-wide. It could tell us a job had run, but not whether a specific merchant's data had landed within their SLA. Some issues were first noticed by customers or account teams rather than by us.</p>
+    <p>Monitoring was run-level and dataset-wide. It could tell us a job had run, but not whether a specific customer's data had landed within their SLA. Some issues were first noticed by customers or account teams rather than by us.</p>
     <h3>Phase 1: respond faster</h3>
-    <p>As lead DRI for SDP's reliability lockdown, I started with response: SLA-attribution dashboards and tighter on-call and acknowledgment workflows. SDP-driven SLA misses fell 78%.</p>
-    <h3>Phase 2: measure what the merchant sees</h3>
-    <p>Next, monitoring moved from infrastructure to merchant-level outcomes:</p>
+    <p>As lead DRI for a reliability lockdown, I started with response: SLA-attribution dashboards and tighter on-call and acknowledgment workflows. SLA misses caused by our platform fell 78%.</p>
+    <h3>Phase 2: measure what the customer sees</h3>
+    <p>Next, monitoring moved from infrastructure to customer-level outcomes:</p>
     <ul>
-      <li>Freshness checked against each merchant's SLA, not just whether a run happened.</li>
-      <li>Per-merchant staleness, so one stale merchant can't hide inside a healthy dataset.</li>
+      <li>Freshness checked against each customer's SLA, not just whether a run happened.</li>
+      <li>Per-customer staleness, so one stale customer can't hide inside a healthy dataset.</li>
       <li>Detection of silently retrying workflow steps, instead of waiting for long timeouts.</li>
-      <li>Entitlement and billing reconciliation, to catch paying merchants without access.</li>
+      <li>Entitlement and billing reconciliation, to catch paying customers without access.</li>
       <li>Health checks on external warehouses and upstream dependencies.</li>
     </ul>
     <h3>Paging without the noise</h3>
     <p>More signals shouldn't mean more pages. Alerts are deduplicated and carry blast-radius context, so one upstream outage produces one actionable page instead of one per affected dataset.</p>
-    <p class="takeaway">Knowing a pipeline ran isn't enough. The question is whether the merchant got their data on time.</p>
+    <p class="takeaway">Knowing a pipeline ran isn't enough. The question is whether the customer got their data on time.</p>
+  </article>
+
+  <article class="story" id="load-story">
+    <span class="chip">Projected ~$636K/year</span>
+    <h2>Load once, deliver twice</h2>
+    <h3>The problem</h3>
+    <p>The platform delivers scheduled datasets into customers' Snowflake accounts. Every destination ran the full physical path on its own: build a manifest, prepare and partition the data in Hadoop, stage files in S3, COPY them into Snowflake, then audit and publish.</p>
+    <p>One large customer had two destinations with exactly the same contract: the same tables, schema and run date, for the same ten active accounts. So every run did the same preparation and the same load twice.</p>
+    <div class="flowd" aria-label="Before: two destinations each run manifest, partition, stage, copy, audit and publish. After: one shared manifest, partition, stage and copy, then each destination runs its own audit and publish.">
+      <div class="fd-label">Before</div>
+      <div class="fd-row"><span class="fd-name">Destination A</span><span class="dup">Manifest</span><span class="dup">Partition</span><span class="dup">Stage</span><span class="dup">COPY</span><span class="own">Audit</span><span class="own">Publish</span></div>
+      <div class="fd-row"><span class="fd-name">Destination B</span><span class="dup">Manifest</span><span class="dup">Partition</span><span class="dup">Stage</span><span class="dup">COPY</span><span class="own">Audit</span><span class="own">Publish</span></div>
+      <div class="fd-label">After</div>
+      <div class="fd-row"><span class="fd-name">Shared, once</span><span class="shared">Manifest</span><span class="shared">Partition</span><span class="shared">Stage</span><span class="shared">COPY</span><span class="fd-fork">→</span><span class="fd-out"><span class="own">A: audit, publish</span><span class="own">B: clone, audit, publish</span></span></div>
+      <div class="fd-key"><span><i class="k-dup"></i>duplicated physical work</span><span><i class="k-shared"></i>shared physical work</span><span><i class="k-own"></i>stays separate per destination</span></div>
+    </div>
+    <h3>What I found</h3>
+    <p>Each destination's identity was tied to both the physical work and the customer-facing delivery. Only the delivery has to stay separate: each destination needs its own database objects, permissions, audit and share. The preparation and load don't.</p>
+    <h3>The design</h3>
+    <ul>
+      <li><strong>An exact-equivalence gate.</strong> Two destinations share a load only if everything matches: the same warehouse account and region; the same dataset, schema, cadence and run date; the same tables and delivery configuration; and exactly the same active accounts for every table.</li>
+      <li><strong>A safe default.</strong> Any mismatch, and both destinations run independently, exactly as before. If a paused account comes back for one destination, the fallback happens on its own.</li>
+      <li><strong>One canonical load.</strong> One destination owns a single manifest, partitioning pass, stage and COPY.</li>
+      <li><strong>Separate delivery.</strong> The other destination gets a zero-copy clone, and each runs its own audit and publish.</li>
+      <li><strong>No customer-visible change.</strong> Same delivery plans, object names, permissions and shares; no migration and no opt-in.</li>
+    </ul>
+    <h3>The tradeoff</h3>
+    <p>Fanning out through shared views instead of clones would also save storage, about $30K more a year. Clones were the proposed route; views remain an alternative.</p>
+    <h3>The result</h3>
+    <p>Estimated savings of about $636K a year (about $53K a month: roughly $43K in warehouse compute and $10K in Hadoop preparation). A hackathon prototype of the shared path used about 29% fewer transfer compute credits than separate loads.</p>
+    <p class="takeaway">Share the physical work. Keep every customer's delivery independent.</p>
   </article>
 
   <footer class="end">
