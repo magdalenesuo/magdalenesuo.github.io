@@ -112,7 +112,7 @@ ul.plain li::marker { color: var(--cobalt); }
       <header class="hero">
         <div class="tag">Acting team lead · Stripe</div>
         <h1>An engineer who stepped up <span>when the team needed a lead.</span></h1>
-        <p class="lede">I'm a Senior Software Engineer on Stripe Data Pipeline. Twice in the past year our team of nine engineers was without a manager, and both times I led it: setting goals, assigning work, running planning, and speaking for the team in leadership reviews. This page is about that side of my work.</p>
+        <p class="lede">I'm a Senior Software Engineer and tech lead on Stripe Data Pipeline, and a founding member of its team in India. Twice since late 2025, our team of nine engineers had no manager, and both times I led it: setting goals, assigning work, running planning, and speaking for the team in reviews with senior management. This page is about that side of my work.</p>
       </header>
 
       <figure class="fig mb-0" id="tl">
@@ -122,12 +122,14 @@ ul.plain li::marker { color: var(--cobalt); }
       <section class="part">
         <div class="num">01</div>
         <h2>Leading without a manager</h2>
-        <p>Our manager was away from September to December 2025, and again from May to July 2026. Our skip-level manager was in the US, so day-to-day leadership of our team of nine fell to me. I covered both jobs: the technical direction I already owned as tech lead, and the manager's day-to-day work.</p>
+        <p>Our team went through a stretch of manager turnover: managers joined and left, and from September to December 2025, and again from May to July 2026, we had no manager at all. Our skip-level manager was in the US, so day-to-day leadership of our team of nine fell to me. I covered both jobs: the technical direction I already owned as tech lead, and the manager's day-to-day work.</p>
         <ul class="plain">
           <li>Set the team's project goals and decided who worked on what.</li>
           <li>Ran planning, so work kept moving without a manager in the room.</li>
-          <li>Represented the team in leadership calls and wrote the updates that kept leadership informed across time zones.</li>
+          <li>Represented the team in senior management calls and wrote the weekly updates that kept our US-based managers informed across time zones.</li>
         </ul>
+        <p>As managers joined and left, I was the constant. Senior management knew the team was in good hands, and their confidence in the team held through every transition. The managers who came in recognized how I had kept the team moving in the right direction.</p>
+        <p class="pull">When there was no one to lead, my job was to make sure the team kept moving in the right direction.</p>
         <div class="row g-3 mt-1">
           <div class="col-sm-4"><div class="fact"><b>7 months</b><span>leading the team across two manager gaps</span></div></div>
           <div class="col-sm-4"><div class="fact"><b>9 engineers</b><span>on the team I led as acting team lead</span></div></div>
@@ -138,19 +140,26 @@ ul.plain li::marker { color: var(--cobalt); }
       <section class="part">
         <div class="num">02</div>
         <h2>A reliability push, run as a team</h2>
-        <p>I was the lead DRI for SDP's reliability lockdown, with five of the team's engineers working on it. We started with how we respond to problems: dashboards that attribute every SLA miss to a cause, and tighter on-call and acknowledgment workflows.</p>
+        <p><strong>Why it mattered.</strong> Stripe Data Pipeline delivers data that thousands of merchants rely on every day. When that data was late or missing, we missed our SLAs, and too often merchants and their account teams noticed before we did. Every one of those misses cost trust.</p>
+        <p>Someone needed to own making the product reliable. I took it on as lead DRI with five engineers, and the plan, what we would fix and how, was mine.</p>
+        <p><strong>Planning from the code up.</strong> Before writing a single task, I did an exhaustive deep dive through the codebase, looking for every place a failure could go unnoticed or data could land late. That became the plan. I then matched the work to people based on bandwidth, experience level, difficulty and priority.</p>
+        <p><strong>Ordering the work.</strong> Correctness and immediate failure risks came first, then detection and observability, then fixing the issues the new alerts surfaced. Reducing noise came last, on purpose: no detection is worse than over-detection.</p>
+        <p><strong>Measuring progress.</strong> Every milestone had exit criteria. Each weekly release was checked against them, and every week I reported where we stood against each milestone.</p>
         <div class="fig my-3">
-          <div class="d-flex justify-content-between align-items-baseline flex-wrap gap-2"><strong style="font-weight:600">SDP-driven SLA misses</strong><span class="tag">indexed, before = 100</span></div>
+          <div class="d-flex justify-content-between align-items-baseline flex-wrap gap-2"><strong style="font-weight:600">SLA misses</strong><span class="tag">indexed, before = 100</span></div>
           <div class="chart-box mt-2"><canvas id="sla" aria-label="SDP-driven SLA misses fell from 100 to 22, a 78 percent reduction"></canvas></div>
         </div>
-        <p>Then we changed what we measure. Monitoring moved from "did the job run?" to "did each merchant get their data on time?", with alerts deduplicated so one upstream outage creates one actionable page instead of dozens. More signal, without burning out the people on call.</p>
-        <p class="pull">The team's job wasn't to fix every alert. It was to make sure merchants got their data, and that on-call stayed sustainable.</p>
+        <p><strong>Raising the bar.</strong> The first phase, with dashboards that attribute every SLA miss to a cause and tighter on-call and acknowledgment workflows, cut SLA misses by 78%. The next phase changed what "reliable" meant. Our monitoring could tell us a job had run, but not whether a specific merchant's data had landed on time, and too many customer-facing incidents were still reaching us through merchants first.</p>
+        <p>The goal: catch failures before customers do, and prove that every past incident would now be detected within minutes. That meant freshness checked against each merchant's SLA, per-merchant staleness, and alerts on silently retrying jobs instead of waiting for a long timeout.</p>
+        <p><strong>Protecting on-call.</strong> On-call was already carrying a heavy page load. Once detection was solid, we deduplicated alerts and added blast-radius context, so one upstream outage raises one actionable page instead of one per dataset.</p>
+        <p><strong>Holding the line on timelines.</strong> The hardest conversation was about time. With AI coding tools, there was pressure to estimate a three-day task as one day. I had already factored AI into the plan, so I pushed back on the rest: AI makes writing code faster, but not gradual rollouts, testing and careful production releases. We met in the middle. Where my reasons held, the timeline stayed. For the rest, we broke the tasks down further and planned the remaining work as a second phase.</p>
+        <p class="pull">Merging code isn't the same as being done.</p>
       </section>
 
       <section class="part">
         <div class="num">03</div>
-        <h2>Growing the team</h2>
-        <p>I helped build the Stripe Data Pipeline team in India and have mentored engineers and interns along the way, in design, debugging and getting projects across the line.</p>
+        <h2>Building teams from the start</h2>
+        <p>I was a founding member of the Stripe Data Pipeline team in India, and a founding member of UDAP (User Data Acquisition Platform), Stripe's batch data distribution platform. I've mentored engineers and interns along the way, in design, debugging and getting projects across the line.</p>
       </section>
 
       <section class="part">
@@ -161,7 +170,7 @@ ul.plain li::marker { color: var(--cobalt); }
           <div class="labels" id="orgmap-labels" aria-hidden="true"></div>
           <p class="cap">Partner orgs I worked with on platform initiatives · illustration</p>
         </div>
-        <p>I was also a founding engineer of UDAP, Stripe's batch data distribution platform, and later the DRI for handing it over to a new owning team. Building something is one skill; handing it over so another team can run it well is another.</p>
+        <p>When UDAP moved to a new owning team, I was the DRI for the handover. Building something is one skill; handing it over so another team can run it well is another.</p>
       </section>
 
       <footer class="endbar">

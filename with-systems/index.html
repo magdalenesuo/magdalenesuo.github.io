@@ -242,13 +242,14 @@ section.part { padding-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 1rem; }
               <span class="when">Jan 2022 – Present</span>
             </header>
             <ul>
+              <li><b>Tech lead</b> for SDP. When the team had no manager (Sep–Dec 2025, May–Jul 2026), stepped up as <b>acting team lead for 9 engineers</b> and kept the team on course through manager turnover, with leadership's confidence and recognition.</li>
               <li>DRI for SDP's <b>S3, SFTP, Snowflake and Redshift</b> destinations: reusable transfer workflows and clients handling per-customer auth, region-aware storage, large files and retries, powering <b>2,500+ merchants</b> (Shopify, OpenAI, Anthropic, DoorDash) and <b>~$18M</b> in platform revenue.</li>
               <li>Cut p99 landing time from <b>9+ hours to under 5</b> on <b>~350 TB/day</b> by diagnosing a YARN "thundering herd" (executor bursts at ~4x queue capacity causing hour-long allocations and preemptions); halved Spark thread pools and retuned queue priority and preemption. Storage throughput rose <b>5x</b>.</li>
               <li>Lead DRI for SDP's reliability lockdown: cut SDP-driven SLA misses by <b>78%</b> via SLA-attribution dashboards and on-call workflows, then moved to <b>merchant-level SLA monitoring</b> (per-merchant freshness, silent-retry detection, entitlement checks) with deduplicated paging.</li>
               <li>DRI for SDP's platformization: a shared delivery framework (event-driven triggers, transfer workflows, connectors, validation, retries, billing) replacing one-off SFTP and report pipelines; <b>105 datasets</b>, <b>~90K workflows/day</b>.</li>
               <li>Designed a shared-load architecture for one of SDP's largest merchants: one canonical Snowflake load, fanned out per destination behind an exact-equivalence gate, projected to save <b>~$636K/year</b> (prototype: ~29% fewer compute credits).</li>
-              <li>Founding engineer of UDAP, Stripe's batch data distribution platform: chose a shared, workflow-driven batch/file design over per-team pipelines or a new streaming layer; DRI for its handover to a new team.</li>
-              <li>Built the SDP and Stripe Reporting integration (<b>~20% of SDP onboarding</b>); helped build the SDP team in India and mentored engineers and interns.</li>
+              <li>Founding member of UDAP (User Data Acquisition Platform), Stripe's batch data distribution platform: chose a shared, workflow-driven batch/file design over per-team pipelines or a new streaming layer; DRI for its handover to a new team.</li>
+              <li>Built the SDP and Stripe Reporting integration (<b>~20% of SDP onboarding</b>); founding member of the SDP team in India; mentored engineers and interns.</li>
             </ul>
           </article>
           <article class="panel job">
